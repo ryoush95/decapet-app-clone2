@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">데카펫</string>
+
+    <string name="kakao_app_key">8358269776945a3b1fdedf8a7f09c6da</string>
+    <string name="client_id">p16_FxUY5ar7gGs2Aamo</string>
+    <string name="client_secret">_jTa3ZQfB1</string>
+    <string name="client_name">decapet</string>
+</resources>

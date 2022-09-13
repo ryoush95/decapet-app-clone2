@@ -1,0 +1,84 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter --no-color pub get
+
+## exception
+
+FormatException: FormatException: Unexpected end of input (at character 1)
+
+^
+
+
+```
+#0      _ChunkedJsonParser.fail (dart:convert-patch/convert_patch.dart:1405:5)
+#1      _ChunkedJsonParser.close (dart:convert-patch/convert_patch.dart:523:7)
+#2      _parseJson (dart:convert-patch/convert_patch.dart:41:10)
+#3      JsonDecoder.convert (dart:convert/json.dart:506:36)
+#4      JsonCodec.decode (dart:convert/json.dart:157:41)
+#5      createPluginSymlinks (package:flutter_tools/src/flutter_plugins.dart:941:51)
+#6      refreshPluginsList (package:flutter_tools/src/flutter_plugins.dart:1038:5)
+<asynchronous suspension>
+#7      FlutterProject.ensureReadyForPlatformSpecificTooling (package:flutter_tools/src/project.dart:316:5)
+<asynchronous suspension>
+#8      PackagesGetCommand.runCommand (package:flutter_tools/src/commands/packages.dart:173:5)
+<asynchronous suspension>
+#9      FlutterCommand.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command.dart:1125:27)
+<asynchronous suspension>
+#10     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#11     CommandRunner.runCommand (package:args/command_runner.dart:209:13)
+<asynchronous suspension>
+#12     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:288:9)
+<asynchronous suspension>
+#13     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#14     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:236:5)
+<asynchronous suspension>
+#15     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:62:9)
+<asynchronous suspension>
+#16     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:150:19)
+<asynchronous suspension>
+#17     main (package:flutter_tools/executable.dart:92:3)
+<asynchronous suspension>
+```
+
+## flutter doctor
+
+```
+[✓] Flutter (Channel unknown, 2.5.0, on Microsoft Windows [Version 10.0.18363.1556], locale en-US)
+    • Flutter version 2.5.0 at G:\DevTool\sdk\flutter
+    • Upstream repository unknown
+    • Framework revision 4cc385b4b8 (7 months ago), 2021-09-07 23:01:49 -0700
+    • Engine revision f0826da7ef
+    • Dart version 2.14.0
+
+[!] Android toolchain - develop for Android devices (Android SDK version 30.0.3)
+    • Android SDK at G:\DevTool\sdk\android-sdk-windows
+    ✗ cmdline-tools component is missing
+      Run `path/to/sdkmanager --install "cmdline-tools;latest"`
+      See https://developer.android.com/studio/command-line for more details.
+    ✗ Android license status unknown.
+      Run `flutter doctor --android-licenses` to accept the SDK licenses.
+      See https://flutter.dev/docs/get-started/install/windows#android-setup for more details.
+
+[✓] Chrome - develop for the web
+    • Chrome at C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+
+[✓] Android Studio (version 2021.1)
+    • Android Studio at C:\Program Files\Android\Android Studio
+    • Flutter plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/9212-flutter
+    • Dart plugin can be installed from:
+      🔨 https://plugins.jetbrains.com/plugin/6351-dart
+    • Java version OpenJDK Runtime Environment (build 11.0.11+9-b60-7590822)
+
+[✓] Connected device (3 available)
+    • LM G820N (mobile) • LMG820N571d36d0 • android-arm64  • Android 11 (API 30)
+    • Chrome (web)      • chrome          • web-javascript • Google Chrome 99.0.4844.84
+    • Edge (web)        • edge            • web-javascript • Microsoft Edge 99.0.1150.55
+
+! Doctor found issues in 1 category.
+```

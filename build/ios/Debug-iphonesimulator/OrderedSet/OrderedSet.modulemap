@@ -1,0 +1,12 @@
+module OrderedSet {
+  umbrella header "OrderedSet-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+
+module OrderedSet.Swift {
+  header "/Users/jihwanan/Desktop/projects/decapet-app/build/ios/Debug-iphonesimulator/OrderedSet/Swift Compatibility Header/OrderedSet-Swift.h"
+  requires objc
+}

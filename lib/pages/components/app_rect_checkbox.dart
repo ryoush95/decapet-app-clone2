@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:decapet/global/app_colors.dart';
+import 'package:decapet/global/app_styles.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:decapet/pages/components/h16_u.dart';
+
+import 'h14.dart';
+import 'h16.dart';
+
+class AppRectCheckbox extends StatelessWidget {
+  final padding;
+
+  AppRectCheckbox(
+      {Key? key,
+      required this.text,
+      required this.checked,
+      required this.onChecked,
+      this.padding,
+      this.isContent = true,
+      this.withBorder = false})
+      : super(key: key);
+
+  String text;
+  bool isContent;
+  bool checked = false;
+  final void Function(bool? checked) onChecked;
+  bool withBorder = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (withBorder) {
+      return InkWell(
+        child: Container(
+            height: 56,
+            padding: EdgeInsets.symmetric(horizontal: padding ?? 0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.0),
+                border: Border.all(color: checked? AppColor_Primary: AppColor_Selector_Border)),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                      checked
+                          ? 'assets/ic_rect_check_on.png'
+                          : 'assets/ic_rect_check_off.png',
+                      gaplessPlayback: true,
+                      height: 22),
+                  const SizedBox(width: 8),
+                  isContent?H16U(text: text, weight: FW.medium):SizedBox(width: 0,),
+                ],
+              ),
+            )
+        ),
+        onTap: () {
+          onChecked(!checked);
+        },
+      );
+    } else {
+      return InkWell(
+        child: Row(
+          children: [
+            Image.asset(
+                checked
+                    ? 'assets/ic_rect_check_on.png'
+                    : 'assets/ic_rect_check_off.png',
+                gaplessPlayback: true,
+                height: 22),
+            const SizedBox(width: 8),
+            isContent?H16U(text: text, weight: FW.medium):SizedBox(width: 1,),
+          ],
+        ),
+        onTap: () {
+          onChecked(!checked);
+        },
+      );
+    }
+  }
+}
+

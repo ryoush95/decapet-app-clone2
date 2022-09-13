@@ -1,0 +1,25 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'pet_list_res_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+PetListResModel _$PetListResModelFromJson(Map<String, dynamic> json) =>
+    PetListResModel(
+      data: json['data'] == null
+          ? null
+          : PetListDto.fromJson(json['data'] as Map<String, dynamic>),
+    )
+      ..result = json['result'] as int?
+      ..msg = json['msg'] as String?
+      ..reason = json['reason'] as String?;
+
+Map<String, dynamic> _$PetListResModelToJson(PetListResModel instance) =>
+    <String, dynamic>{
+      'result': instance.result,
+      'msg': instance.msg,
+      'reason': instance.reason,
+      'data': instance.data,
+    };

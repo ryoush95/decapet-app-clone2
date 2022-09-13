@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "463574494071",
+    "project_id": "decapet-37d06",
+    "storage_bucket": "decapet-37d06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463574494071:android:c2cc9088b1f230bfb84f72",
+        "android_client_info": {
+          "package_name": "com.kyad.decapet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463574494071-cdecdsnv0t0bn5288pbfpbmu6urg4uad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUcpV-7nq7mF1yY0sRLDMWhqQVrY0sHZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463574494071-cdecdsnv0t0bn5288pbfpbmu6urg4uad.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "463574494071-osuhneck7khfq423qhho4egc2n4ajhsi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kyad.decapet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
