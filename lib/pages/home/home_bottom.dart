@@ -125,7 +125,7 @@ class HomeBottomPageState extends BaseState<HomeBottomPage> {
         children: [
           Container(
             child: Row(
-              children: [
+              /*children: [
                 Expanded(
                   child: H20(
                     text: LanguageService.trans("home_bottom_description"),
@@ -140,10 +140,10 @@ class HomeBottomPageState extends BaseState<HomeBottomPage> {
                   ),
                   onTap: onGoReviewManage,
                 )
-              ],
+              ],*/
             ),
           ),
-          const SizedBox(height: 20),
+         /* const SizedBox(height: 20),
           Container(
             width: double.infinity,
             height: 250,
@@ -159,7 +159,7 @@ class HomeBottomPageState extends BaseState<HomeBottomPage> {
                   );
                 },
                 itemCount: items.length),
-          ),
+          ),*/
         ],
       ),
     );

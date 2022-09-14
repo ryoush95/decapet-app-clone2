@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:decapet/pages/alarm/wait.dart';
 import 'my_point.dart';
 
 class MyPage extends StatefulWidget {
@@ -101,15 +101,15 @@ class MyPageState extends BaseState<MyPage> {
                     ),
                     InkWell(
                       onTap: onGoMyPoint,
-                      child: Observer(builder: (_) => ListItem(title: LanguageService.trans('mypage_mypoint'), icon_path: "assets/savings_black_24dp1.png", font_size: 16, font_style: FW.medium, badge: formatAmount(user.info.my_point) + " " + LanguageService.trans("p"))),
+                      child: Observer(builder: (_) => ListItem(title: LanguageService.trans('mypage_mypoint'), icon_path: "assets/savings_black_24dp1.png", font_size: 16, font_style: FW.medium, badge: "" /*formatAmount(user.info.my_point) + " " + LanguageService.trans("p")*/)),
                     ),
                     InkWell(
                       onTap: onGoPetList,
-                      child: Observer(builder: (_) => ListItem(title: LanguageService.trans('mypage_petlist'), icon_path: "assets/pets_black_24dp1.png", font_size: 16, font_style: FW.medium, badge: user.info.pet_cnt.toString())),
+                      child: Observer(builder: (_) => ListItem(title: LanguageService.trans('mypage_petlist'), icon_path: "assets/pets_black_24dp1.png", font_size: 16, font_style: FW.medium, badge: "" /*user.info.pet_cnt.toString()*/)),
                     ),
                     InkWell(
                       onTap: onGoReservHistory,
-                      child: Observer(builder: (_) => ListItem(title: LanguageService.trans('mypage_reservationhistory'), icon_path: "assets/inventory_black_24dp.png", font_size: 16, font_style: FW.medium, badge: user.info.reservation_cnt.toString())),
+                      child: Observer(builder: (_) => ListItem(title: LanguageService.trans('mypage_reservationhistory'), icon_path: "assets/inventory_black_24dp.png", font_size: 16, font_style: FW.medium, badge: ""/*user.info.reservation_cnt.toString()*/)),
                     ),
                     InkWell(
                       onTap: onGoReviewManage,
@@ -179,23 +179,23 @@ class MyPageState extends BaseState<MyPage> {
   }
 
   void onGoMyPoint() {
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => MyPointPage()));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait()));
   }
 
   void onGoPetList() {
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => PetListPage()));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait()));
   }
 
   void onGoReservHistory() {
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => ReserveHistoryPage()));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait()));
   }
 
   void onGoReviewManage() {
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => ReviewManagePage()));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait()));
   }
 
   void onGoFavHospital() {
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => FavorHospitalPage()));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait()));
   }
 
   void onLogout() {

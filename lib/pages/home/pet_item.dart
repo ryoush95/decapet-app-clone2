@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-
+import 'package:decapet/pages/alarm/wait.dart';
 import 'heartworm.dart';
 
 class PetItem extends StatefulWidget {
@@ -355,7 +355,7 @@ class PetItemState extends BaseState<PetItem> {
       }
     }
 
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => BloodTestAppFirstPage(item: widget.item)));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait(/*item: widget.item*/)));
   }
 
   void onResult() {
@@ -363,7 +363,7 @@ class PetItemState extends BaseState<PetItem> {
   }
 
   void onChart() {
-    Navigator.push(context, SlideRightTransRoute(builder: (context) => TreatmentChartPage(petUid: widget.item.id, petName: widget.item.name, animaltype: widget.item.animal_type)));
+    Navigator.push(context, SlideRightTransRoute(builder: (context) => Wait(/*petUid: widget.item.id, petName: widget.item.name, animaltype: widget.item.animal_type*/)));
   }
 
   @override

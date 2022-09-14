@@ -4,7 +4,7 @@ final Map<String, String> ko_lang = {
   "select_gallery": "갤러리에서 선택",
   "select_camera": "카메라로 촬영",
   "image_crop": "이미지 자르기",
-
+  "service_wait": "서비스 준비 중 입니다.",
   "My_Info": "내 정보",
   "email": "이메일",
   "birthday": "생년월일",

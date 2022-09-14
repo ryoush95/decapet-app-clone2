@@ -20,6 +20,7 @@ import 'package:decapet/pages/mypage/mypage.dart';
 import 'package:decapet/pages/review/review_write.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:decapet/pages/alarm/wait2.dart';
 
 //import 'alarm/alarm.dart';
 import 'alarm/alarm.dart';
@@ -211,7 +212,7 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
               Center(
                 child: Image.asset('assets/ic_main_logo.png', height: 20),
               ),
-              Align(
+             /* Align(
                 alignment: Alignment.centerRight,
                 child: MainTextButton(
                   text: formatAmount(user.info.my_point) + LanguageService.trans('p'),
@@ -226,7 +227,7 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                     goMyPointPage();
                   },
                 ),
-              )
+              )*/
             ]),
           ),
           Expanded(
@@ -240,11 +241,11 @@ class TabMainPageState extends BaseState<TabMainPage> with TickerProviderStateMi
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: ReviewWritePage(),
+                  child: Wait2(),
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: FindHospital(),
+                  child: Wait2(),
                 ),
                 Container(
                   alignment: Alignment.center,
