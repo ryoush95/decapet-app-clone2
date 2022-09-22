@@ -223,7 +223,7 @@ class BloodTestResultState extends BaseState<BloodTestResultPage> {
                                 SizedBox(
                                   width: 105,
                                   child: H14(
-                                    text: convertNumber(itemList[index].reference_min) + ' ~ ' + convertNumber(itemList[index].reference_max),
+                                    text: convertNumber(itemList[index].reference_max) != '0' ? convertNumber(itemList[index].reference_min) + ' ~ ' + convertNumber(itemList[index].reference_max) : "",
                                     align: TextAlign.center,
                                     weight: FW.regular,
                                   ),
