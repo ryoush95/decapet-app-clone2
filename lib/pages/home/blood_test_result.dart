@@ -1,3 +1,4 @@
+import 'package:decapet/global/app_colors.dart';
 import 'package:decapet/global/app_styles.dart';
 import 'package:decapet/helpers/common_util.dart';
 import 'package:decapet/language/language_service.dart';
@@ -223,7 +224,9 @@ class BloodTestResultState extends BaseState<BloodTestResultPage> {
                                 SizedBox(
                                   width: 105,
                                   child: H14(
-                                    text: convertNumber(itemList[index].reference_max) != '0' ? convertNumber(itemList[index].reference_min) + ' ~ ' + convertNumber(itemList[index].reference_max) : "",
+                                    text: convertNumber(itemList[index].reference_max) != '0'
+                                        ? convertNumber(itemList[index].reference_min) + ' ~ ' + convertNumber(itemList[index].reference_max)
+                                        : "",
                                     align: TextAlign.center,
                                     weight: FW.regular,
                                   ),
@@ -251,6 +254,11 @@ class BloodTestResultState extends BaseState<BloodTestResultPage> {
                                                     text: resultList[i].value,
                                                     align: TextAlign.center,
                                                     weight: FW.regular,
+                                                    color:
+                                                        (double.parse(itemList[index].reference_min) < double.parse(resultList[i].value)
+                                                        && double.parse(itemList[index].reference_max) > double.parse(resultList[i].value))
+                                                        || convertNumber(itemList[index].reference_max) == '0'
+                                                        ?  AppColor_BlackText: AppColor_Red
                                                   ),
                                                 ));
                                           }
