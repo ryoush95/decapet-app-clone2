@@ -63,6 +63,8 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
 
   bool isValid = false;
   List<String> pathList = [];
+  bool idValid = false;
+  String target = "";
 
   void loadPathList() {
     showLoading();
@@ -87,9 +89,14 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
   void initState() {
     super.initState();
     loadPathList();
-
+    if (Platform.isAndroid) {
+      target = "android";
+    } else {
+      target = "ios";
+    }
     if (widget.isEdit) {
       setState(() {
+        idValid = true;
         emailController.text = user.info.email;
         email = user.info.email;
         pwdController.text = user.info.pwd;
@@ -107,6 +114,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         addr2InputController.text = user.info.address_detail;
         address2 = user.info.address_detail;
         joinPath = user.info.path;
+        print(joinPath);
         referInputController.text = user.info.recommend_email;
         referId = user.info.recommend_email;
       });
@@ -130,9 +138,11 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         isValid = false;
       });
     } else {
-      setState(() {
-        isValid = true;
-      });
+      if(idValid) {
+        setState(() {
+          isValid = true;
+        });
+      }
     }
 
     if (referId.isNotEmpty) {
@@ -156,7 +166,27 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         if (value.result == 0) {
           value.data!.pwd = pwd;
           user.setInfo(value.data);
-          Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupUsePage()));
+          // Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupUsePage()));
+        } else {
+          showToast(value.msg!);
+        }
+      });
+    } on Exception catch (_, e) {
+      hideLoading();
+      showToast(LanguageService.trans("network_error"));
+    }
+  }
+
+  void idCheck1() {
+    showLoading();
+    try {
+      api.idCheck(email).then((value) {
+        hideLoading();
+        if (value.result == 0) {
+          showToast("사용가능한 이메일입니다.");
+          setState(() {
+            idValid = true;
+          });
         } else {
           showToast(value.msg!);
         }
@@ -179,8 +209,6 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
           user.setInfo(value.data);
           if (widget.isEdit) {
             Navigator.of(context).pop(true);
-          } else {
-            Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupUsePage()));
           }
         } else {
           showToast(value.msg!);
@@ -325,14 +353,45 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                           color: AppColor_Input_Title,
                         ),
                         const SizedBox(height: 10),
-                        UnderlineInput(
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: () => node.nextFocus(),
-                          placeholder: LanguageService.trans("input_email"),
-                          height: 30,
-                          onChanged: (text) => {email = text, checkValid()},
+                        Row(
+                          children: [
+                            Expanded(
+                              child: UnderlineInput(
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                onEditingComplete: () => node.nextFocus(),
+                                placeholder: LanguageService.trans("input_email"),
+                                height: 30,
+                                onChanged: (text) => {email = text, checkValid()},
+                              ),
+                            ),
+                            Visibility(
+                              visible: !widget.isEdit,
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: MainTextButton(
+                                  width: 70,
+                                  style: AppTextStyle.PD(Colors.white,14),
+                                  text: "중복확인",
+                                  disable: idValid,
+                                  disableBackground: !isValid ? AppColor_Primary_Disable : Colors.transparent,
+                                  onPressed: (){
+                                    if(idValid) return;
+                                    if(email.isEmpty){
+                                      showToast("이메일을 입력해주세요");
+                                    } else if (!validEmail(email)){
+                                      showToast("이메일을 정확하게 입력해주세요");
+                                    }else {
+                                      node.unfocus();
+                                      idCheck1();
+                                      checkValid();
+                                    }
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         const SizedBox(height: 20),
                         Visibility(
@@ -506,7 +565,11 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                           keyboardType: TextInputType.emailAddress,
                           textInputAction: TextInputAction.done,
                           onEditingComplete: () {
-                            widget.isEdit ? onChangeProfile() : onSignup();
+                            FocusScope.of(context).unfocus();
+                            // widget.isEdit ? onChangeProfile()
+                            //     : Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupUsePage(
+                            //     email, pwd, name, getDateFormatString(birthday!, "yyyy-MM-dd"), phone, joinPath, referId, zipCode, address1, address2, target, gPushKey, widget.signupType
+                            // )));
                           },
                           placeholder: LanguageService.trans("input_email_optional"),
                           onChanged: (text) {
@@ -518,31 +581,32 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                       ],
                     ),
                   ),
-                  Visibility(
-                      visible: !widget.isEdit,
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 24),
-                        color: AppColor_Primary_Disable,
-                        height: 50,
-                        width: double.infinity,
-                        //padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
-                        child: SubstringHighlight(
-                          text: LanguageService.trans("signup_hints"),
-                          term: LanguageService.trans("signup_hints_1"),
-                          textStyle: AppTextStyle.PD(
-                            AppColor_Primary,
-                            14,
-                            weight: FW.medium,
-                          ),
-                          textStyleHighlight: AppTextStyle.PD(
-                            AppColor_Primary,
-                            14,
-                            weight: FW.bold,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      )),
+                  // 추천인 문구
+                  // Visibility(
+                  //     visible: !widget.isEdit,
+                  //     child: Container(
+                  //       margin: const EdgeInsets.only(top: 24),
+                  //       color: AppColor_Primary_Disable,
+                  //       height: 50,
+                  //       width: double.infinity,
+                  //       //padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  //       padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                  //       child: SubstringHighlight(
+                  //         text: LanguageService.trans("signup_hints"),
+                  //         term: LanguageService.trans("signup_hints_1"),
+                  //         textStyle: AppTextStyle.PD(
+                  //           AppColor_Primary,
+                  //           14,
+                  //           weight: FW.medium,
+                  //         ),
+                  //         textStyleHighlight: AppTextStyle.PD(
+                  //           AppColor_Primary,
+                  //           14,
+                  //           weight: FW.bold,
+                  //         ),
+                  //         textAlign: TextAlign.left,
+                  //       ),
+                  //     )),
                   const SizedBox(height: 55),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -555,7 +619,12 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                       disable: !isValid,
                       disableBackground: !isValid ? AppColor_Primary_Disable : Colors.transparent,
                       onPressed: () {
-                        widget.isEdit ? onChangeProfile() : onSignup();
+                        if(!isValid) return;
+                        widget.isEdit ? onChangeProfile()
+                            : Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupUsePage(
+                            email: email, pwd: pwd, name: name, birthday: getDateFormatString(birthday!, "yyyy-MM-dd"),
+                            phone: phone, joinPath: joinPath, referId: referId, zipCode: zipCode, address1: address1, address2: address2, target:target, gPushKey:gPushKey, signupType:widget.signupType
+                        )));
                       },
                     ),
                   ),

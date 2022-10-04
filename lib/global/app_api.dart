@@ -54,6 +54,11 @@ abstract class Api {
     @Field("signup_type") String signup_type,
   );
 
+  @POST("/api/User/id_check")
+  Future<UserResModel> idCheck(
+     @Field("email") String email,
+  );
+
   @POST("/api/User/path_list")
   Future<StringListResModel> pathList();
 
