@@ -203,7 +203,7 @@ class SignupPageState extends BaseState<SignupPage> {
                     ),
                     const SizedBox(height: 30),
                     AppRectALLCheckbox(
-                      text: LanguageService.trans("signup_all_agrees"),
+                      text: "모든 약관을 확인했으며 이에 동의합니다.",
                       textcolor: isALL ? AppColor_BlackText : AppColor_GrayText,
                       checked: isALL ? true : false,
                       onChecked: (checked) {

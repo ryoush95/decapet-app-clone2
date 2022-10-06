@@ -258,6 +258,7 @@ class HeartWormPageState extends BaseState<HeartWormPage> {
                     disable: !isValid,
                     disableBackground: isValid ? AppColor_Primary : AppColor_Primary_Disable,
                     onPressed: () {
+                      if(!isValid) return;
                       onNext();
                     },
                   ),

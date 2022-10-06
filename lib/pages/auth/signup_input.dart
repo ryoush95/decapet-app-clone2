@@ -123,6 +123,8 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
     }
 
     if (widget.signupType != "normal") {
+      email = widget.snsId;
+      emailController.text = widget.snsId;
       pwd = widget.snsId;
     }
   }
@@ -133,12 +135,36 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
   }
 
   void checkValid() {
-    if (!validEmail(email) || pwd.isEmpty || name.isEmpty || phone.isEmpty || zipCode.isEmpty || address1.isEmpty) {
-      setState(() {
-        isValid = false;
-      });
+    if (widget.signupType == 'normal') {
+      if (!validEmail(email) ||
+          pwd.isEmpty ||
+          name.isEmpty ||
+          phone.isEmpty ||
+          zipCode.isEmpty ||
+          address1.isEmpty ||
+          address2.isEmpty) {
+        setState(() {
+          isValid = false;
+        });
+      } else {
+        if (idValid) {
+          setState(() {
+            isValid = true;
+          });
+        }
+      }
     } else {
-      if(idValid) {
+      idValid = true;
+      if (pwd.isEmpty ||
+          name.isEmpty ||
+          phone.isEmpty ||
+          zipCode.isEmpty ||
+          address1.isEmpty ||
+          address2.isEmpty) {
+        setState(() {
+          isValid = false;
+        });
+      } else {
         setState(() {
           isValid = true;
         });
@@ -161,7 +187,22 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
       } else {
         target = "ios";
       }
-      api.signUp(email, pwd, name, getDateFormatString(birthday!, "yyyy-MM-dd"), phone, joinPath, referId, zipCode, address1, address2, target, gPushKey, widget.signupType).then((value) {
+      api
+          .signUp(
+              email,
+              pwd,
+              name,
+              getDateFormatString(birthday!, "yyyy-MM-dd"),
+              phone,
+              joinPath,
+              referId,
+              zipCode,
+              address1,
+              address2,
+              target,
+              gPushKey,
+              widget.signupType)
+          .then((value) {
         hideLoading();
         if (value.result == 0) {
           value.data!.pwd = pwd;
@@ -202,7 +243,9 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     showLoading();
     try {
-      api.changeProfile(user.info.access_token, email, pwd, name, birth, phone, zipCode, address1, address2, joinPath, referId).then((value) {
+      api.changeProfile(user.info.access_token, email, pwd, name, birth, phone,
+              zipCode, address1, address2, joinPath, referId)
+          .then((value) {
         hideLoading();
         if (value.result == 0) {
           value.data!.pwd = pwd;
@@ -246,7 +289,10 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
       builder: (context) {
         return Container(
           padding: const EdgeInsets.fromLTRB(25, 20, 25, 20),
-          decoration: const BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)), color: Colors.white),
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+              color: Colors.white),
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -283,8 +329,12 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                       hideLoading();
                       if (value.result == 0) {
                         user.setInfo(UserDto());
-                        Navigator.of(context).popUntil((route) => route.isFirst);
-                        Navigator.pushReplacement(context, SlideRightTransRoute(builder: (context) => StartPage()));
+                        Navigator.of(context)
+                            .popUntil((route) => route.isFirst);
+                        Navigator.pushReplacement(
+                            context,
+                            SlideRightTransRoute(
+                                builder: (context) => StartPage()));
                       } else {
                         showToast(value.msg!);
                       }
@@ -304,7 +354,10 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
 
   void onSelectBirthday() {
     FocusScope.of(context).requestFocus(FocusNode());
-    DatePicker.showDatePicker(context, showTitleActions: true, minTime: DateTime(1900), maxTime: DateTime(2100), onChanged: (date) {
+    DatePicker.showDatePicker(context,
+        showTitleActions: true,
+        minTime: DateTime(1900),
+        maxTime: DateTime(2100), onChanged: (date) {
 //          print('change $date');
     }, onConfirm: (date) {
       setState(() {
@@ -323,7 +376,9 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SimpleHeader(
-            title: widget.isEdit ? LanguageService.trans("edit_your_info") : LanguageService.trans("signup"),
+            title: widget.isEdit
+                ? LanguageService.trans("edit_your_info")
+                : LanguageService.trans("signup"),
             onBackPressed: onBackPressed,
           ),
           Expanded(
@@ -340,65 +395,73 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                             child: Container(
                               margin: EdgeInsets.only(top: 10),
                               child: H24B(
-                                text: LanguageService.trans("signupinputpage_description"),
+                                text: LanguageService.trans(
+                                    "signupinputpage_description"),
                                 color: AppColor_BlackText,
                                 height: 1.5,
                                 maxLine: 2,
                               ),
                             )),
                         const SizedBox(height: 13),
-                        H14(
-                          text: LanguageService.trans("email"),
-                          weight: FW.medium,
-                          color: AppColor_Input_Title,
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: UnderlineInput(
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                onEditingComplete: () => node.nextFocus(),
-                                placeholder: LanguageService.trans("input_email"),
-                                height: 30,
-                                onChanged: (text) => {email = text, checkValid()},
-                              ),
-                            ),
-                            Visibility(
-                              visible: !widget.isEdit,
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: MainTextButton(
-                                  width: 70,
-                                  style: AppTextStyle.PD(Colors.white,14),
-                                  text: "중복확인",
-                                  disable: idValid,
-                                  disableBackground: !isValid ? AppColor_Primary_Disable : Colors.transparent,
-                                  onPressed: (){
-                                    if(idValid) return;
-                                    if(email.isEmpty){
-                                      showToast("이메일을 입력해주세요");
-                                    } else if (!validEmail(email)){
-                                      showToast("이메일을 정확하게 입력해주세요");
-                                    }else {
-                                      node.unfocus();
-                                      idCheck1();
-                                      checkValid();
-                                    }
-                                  },
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 20),
                         Visibility(
-                            visible: widget.signupType == "normal",
+                          visible: widget.signupType == 'normal',
+                          child: Visibility(
+                            visible: !widget.isEdit,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                H14(
+                                  text: LanguageService.trans("email"),
+                                  weight: FW.medium,
+                                  color: AppColor_Input_Title,
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: UnderlineInput(
+                                        controller: emailController,
+                                        keyboardType: TextInputType.emailAddress,
+                                        textInputAction: TextInputAction.next,
+                                        onEditingComplete: () => node.nextFocus(),
+                                        placeholder:
+                                            LanguageService.trans("input_email"),
+                                        height: 30,
+                                        onChanged: (text) =>
+                                            {email = text, checkValid()},
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: !widget.isEdit,
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                        child: MainTextButton(
+                                          width: 70,
+                                          style:
+                                              AppTextStyle.PD(Colors.white, 14),
+                                          text: "중복확인",
+                                          disable: idValid,
+                                          disableBackground: !isValid
+                                              ? AppColor_Primary_Disable
+                                              : Colors.transparent,
+                                          onPressed: () {
+                                            if (idValid) return;
+                                            if (email.isEmpty) {
+                                              showToast("이메일을 입력해주세요");
+                                            } else if (!validEmail(email)) {
+                                              showToast("이메일을 정확하게 입력해주세요");
+                                            } else {
+                                              node.unfocus();
+                                              idCheck1();
+                                              checkValid();
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
                                 H14(
                                   text: LanguageService.trans("password"),
                                   weight: FW.medium,
@@ -411,13 +474,16 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                   isSecure: true,
                                   textInputAction: TextInputAction.done,
                                   onEditingComplete: () => node.nextFocus(),
-                                  placeholder: LanguageService.trans("input_passwd"),
+                                  placeholder:
+                                      LanguageService.trans("input_passwd"),
                                   height: 30,
                                   onChanged: (text) => {pwd = text, checkValid()},
                                 ),
                                 const SizedBox(height: 20),
                               ],
-                            )),
+                            ),
+                          ),
+                        ),
                         H14(
                           text: LanguageService.trans("name"),
                           weight: FW.medium,
@@ -449,8 +515,12 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                             child: H16(
                               align: TextAlign.start,
                               weight: FW.medium,
-                              text: birthday != null ? getDateFormatString(birthday!, "yyyy-MM-dd") : LanguageService.trans("birthday"),
-                              color: birthday != null ? AppColor_BlackText : AppColor_Hint,
+                              text: birthday != null
+                                  ? getDateFormatString(birthday!, "yyyy-MM-dd")
+                                  : LanguageService.trans("birthday"),
+                              color: birthday != null
+                                  ? AppColor_BlackText
+                                  : AppColor_Hint,
                             ),
                           ),
                         ),
@@ -467,12 +537,13 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                           textInputAction: TextInputAction.next,
                           maxLength: 11,
                           onEditingComplete: () => node.nextFocus(),
-                          placeholder: LanguageService.trans("input_only_number"),
+                          placeholder:
+                              LanguageService.trans("input_only_number"),
                           height: 30,
                           onChanged: (text) {
                             phone = text;
                             checkValid();
-                            },
+                          },
                         ),
                         const SizedBox(height: 20),
                         H14(
@@ -611,20 +682,39 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: MainTextButton(
-                      text: widget.isEdit ? LanguageService.trans("to_save") : LanguageService.trans("getting_started"),
+                      text: widget.isEdit
+                          ? LanguageService.trans("to_save")
+                          : LanguageService.trans("getting_started"),
                       backgroundColor: AppColor_Primary,
                       style: AppTextStyle.PD(Colors.white, 18, weight: FW.bold),
                       //width: 360,
                       height: 58,
                       disable: !isValid,
-                      disableBackground: !isValid ? AppColor_Primary_Disable : Colors.transparent,
+                      disableBackground: !isValid
+                          ? AppColor_Primary_Disable
+                          : Colors.transparent,
                       onPressed: () {
-                        if(!isValid) return;
-                        widget.isEdit ? onChangeProfile()
-                            : Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupUsePage(
-                            email: email, pwd: pwd, name: name, birthday: getDateFormatString(birthday!, "yyyy-MM-dd"),
-                            phone: phone, joinPath: joinPath, referId: referId, zipCode: zipCode, address1: address1, address2: address2, target:target, gPushKey:gPushKey, signupType:widget.signupType
-                        )));
+                        if (!isValid) return;
+                        widget.isEdit
+                            ? onChangeProfile()
+                            : Navigator.push(
+                                context,
+                                SlideRightTransRoute(
+                                    builder: (context) => SignupUsePage(
+                                        email: email,
+                                        pwd: pwd,
+                                        name: name,
+                                        birthday: getDateFormatString(
+                                            birthday!, "yyyy-MM-dd"),
+                                        phone: phone,
+                                        joinPath: joinPath,
+                                        referId: referId,
+                                        zipCode: zipCode,
+                                        address1: address1,
+                                        address2: address2,
+                                        target: target,
+                                        gPushKey: gPushKey,
+                                        signupType: widget.signupType)));
                       },
                     ),
                   ),

@@ -62,7 +62,7 @@ class RegisterPetThirdPageState extends BaseState<RegisterPetThirdPage> {
 
   void checkValid() {
     setState(() {
-      isValid = name.isNotEmpty && animalType.isNotEmpty && gender.isNotEmpty && breed.isNotEmpty && gender.isNotEmpty && neuteringStatus.isNotEmpty && birthday != null && personality.isNotEmpty;
+      isValid = name.isNotEmpty && animalType.isNotEmpty && gender.isNotEmpty && breed.isNotEmpty && gender.isNotEmpty && neuteringStatus.isNotEmpty && personality.isNotEmpty;
     });
   }
 
