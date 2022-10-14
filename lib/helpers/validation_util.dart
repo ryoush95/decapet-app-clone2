@@ -20,7 +20,7 @@ bool validPwd(String pwd) {
   return regExp.hasMatch(pwd);
 }
 
-bool validPhone(String phone) {
+bool validPhone1(String phone) {
   String pattern = r"^01(?:0|1|[6-9])[-\\s\\.]?[0-9]{4}[-\\s\\.]?[0-9]{4}$";
   RegExp regExp = RegExp(pattern);
   return regExp.hasMatch(phone);

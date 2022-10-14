@@ -32,7 +32,8 @@ class MyInfoPage extends StatefulWidget {
 class MyInfoPageState extends BaseState<MyInfoPage> {
   String profileImage = "";
   final imagePicker = ImagePicker();
-
+  int code = 0;
+  int isSendCode = 0;
   @override
   void initState() {
     super.initState();
@@ -46,11 +47,17 @@ class MyInfoPageState extends BaseState<MyInfoPage> {
     return true;
   }
 
+  void onSendCode(int code) {
+    setState(() {
+      this.code = code;
+      isSendCode = code;
+    });
+  }
   void onEdit() {
     Future<dynamic> result = Navigator.push(
         context,
         SlideRightTransRoute(
-            builder: (context) => SignupInputPage(isEdit: true)));
+            builder: (context) => SignupInputPage(isEdit: true, onSendCode: onSendCode,)));
 
     result.then((value) {
       if (value) {

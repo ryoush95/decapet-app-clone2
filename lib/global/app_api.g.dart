@@ -132,6 +132,22 @@ class _Api implements Api {
   }
 
   @override
+  Future<ApiResModel> request_cert_key1(phone) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {'phone': phone,};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApiResModel>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/api/User/request_cert_key1',
+                queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ApiResModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<CertResModel> check_cert_key(phone, cert_key) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

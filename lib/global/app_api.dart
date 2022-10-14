@@ -71,6 +71,9 @@ abstract class Api {
     @Field("signup_type") String signup_type,
   );
 
+  @POST("/api/User/request_cert_key1")
+  Future<ApiResModel> request_cert_key1(@Field("phone") String phone);
+
   @POST("/api/User/request_cert_key")
   Future<ApiResModel> request_cert_key(@Field("phone") String phone, @Field("name") String name, @Field("email") String email);
 

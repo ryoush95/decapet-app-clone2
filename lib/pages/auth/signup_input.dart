@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:decapet/global/app_colors.dart';
@@ -32,14 +33,16 @@ class SignupInputPage extends StatefulWidget {
   final bool isEdit;
   final signupType;
   final snsId;
+  final void Function(int code) onSendCode;
 
-  const SignupInputPage({Key? key, required this.isEdit, this.signupType = 'normal', this.snsId = ''}) : super(key: key);
+  const SignupInputPage({Key? key, required this.isEdit, this.signupType = 'normal', this.snsId = '', required this.onSendCode}) : super(key: key);
 
   @override
   SignupInputPageState createState() => SignupInputPageState();
 }
 
 class SignupInputPageState extends BaseState<SignupInputPage> {
+  int pageType = 1;
   var emailController = TextEditingController();
   var pwdController = TextEditingController();
   var nameController = TextEditingController();
@@ -48,11 +51,20 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
   var addr1InputController = TextEditingController();
   var addr2InputController = TextEditingController();
   var referInputController = TextEditingController();
+  var codeInputController = TextEditingController();
+  var certificationInputController = TextEditingController();
+  late Timer timer;
+  int stimer = 30;
+  bool timerBt = true;
+  bool timerBt1 = false;
+
+  int nIdStep = 0;
 
   String email = "";
   String pwd = "";
   String name = "";
   String phone = "";
+  String phoneCode = "";
   String zipCode = "";
   String address1 = "";
   String address2 = "";
@@ -65,6 +77,8 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
   List<String> pathList = [];
   bool idValid = false;
   String target = "";
+
+  String verification_code = "";
 
   void loadPathList() {
     showLoading();
@@ -134,7 +148,25 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
     return false;
   }
 
+  void startTimer() {
+    var count = const Duration(seconds: 1);
+    timer = Timer.periodic(count, (timer) {
+      if (stimer == 0){
+        setState(() {
+          timer.cancel();
+          stimer = 60;
+          timerBt = true;
+        });
+      }else {
+        setState(() {
+          stimer--;
+        });
+      }
+    });
+  }
+
   void checkValid() {
+
     if (widget.signupType == 'normal') {
       if (!validEmail(email) ||
           pwd.isEmpty ||
@@ -173,6 +205,16 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
 
     if (referId.isNotEmpty) {
       isValid = isValid && validEmail(referId);
+    }
+
+    if (verification_code.isEmpty ) {
+      setState(() {
+        isValid = false;
+      });
+    } else {
+      setState(() {
+        isValid = true;
+      });
     }
   }
 
@@ -225,6 +267,49 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         hideLoading();
         if (value.result == 0) {
           showToast("사용가능한 이메일입니다.");
+          setState(() {
+            idValid = true;
+          });
+        } else {
+          showToast(value.msg!);
+        }
+      });
+    } on Exception catch (_, e) {
+      hideLoading();
+      showToast(LanguageService.trans("network_error"));
+    }
+  }
+
+  void phoneCheck() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    showLoading();
+    try {
+      api.request_cert_key1(phone).then((value) {
+        hideLoading();
+        if (value.result == 0) {
+          showToast("인증번호를 전송하였습니다.");
+          setState(() {
+            idValid = true;
+          });
+        } else {
+          showToast(value.msg!);
+        }
+      });
+    } on Exception catch (_, e) {
+      hideLoading();
+      showToast(LanguageService.trans("network_error"));
+    }
+  }
+
+  void onVerificationCode() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    showLoading();
+    try {
+      api.check_cert_key(phone, verification_code).then((value) {
+        hideLoading();
+        if (value.result == 0) {
+          showToast("인증되었습니다.");
+          //widget.onSendCode(2);
           setState(() {
             idValid = true;
           });
@@ -531,19 +616,109 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                           color: AppColor_Input_Title,
                         ),
                         const SizedBox(height: 10),
-                        UnderlineInput(
-                          controller: phoneController,
-                          keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
-                          maxLength: 11,
-                          onEditingComplete: () => node.nextFocus(),
-                          placeholder:
-                              LanguageService.trans("input_only_number"),
-                          height: 30,
-                          onChanged: (text) {
-                            phone = text;
-                            checkValid();
-                          },
+                        Row(
+                          children: [
+                            Expanded(
+                                child: UnderlineInput(
+                                  controller: phoneController,
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.next,
+                                  maxLength: 11,
+                                  onEditingComplete: () => node.nextFocus(),
+                                  placeholder:
+                                  LanguageService.trans("input_only_number"),
+                                  height: 30,
+                                  onChanged: (text) {
+                                    phone = text;
+                                    checkValid();
+                                  },
+                                ),
+                            ),
+                            Visibility(
+                              visible: !widget.isEdit,
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: timerBt ?
+                                MainTextButton(
+                                  width: 70,
+                                  style:
+                                  AppTextStyle.PD(Colors.white, 14),
+                                  text: timerBt1 ? "인증번호 \n재전송" : "인증번호\n전송" ,
+                                  disable: isValid,
+                                  disableBackground: !isValid
+                                      ? AppColor_Primary_Disable
+                                      : Colors.transparent,
+                                  onPressed: () {
+                                    if (isValid) return;
+                                    if (phone.isEmpty) {
+                                      showToast("전화번호를 입력해주세요.");
+                                    } else if (!validPhone1(phone)) {
+                                      showToast("전화번호를 정확하게 입력해주세요.");
+                                    } else {
+                                      node.unfocus();
+                                      phoneCheck();
+                                      checkValid();
+                                      startTimer();
+                                      timerBt = false;
+                                      timerBt1 = true;
+                                     // phoneCodeCheck();
+                                    }
+                                  },
+                                )
+                                    : MainTextButton(
+                                  backgroundColor: AppColor_Gray,
+                                  text: stimer.toString(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        H14(
+                            text: LanguageService.trans("인증번호 입력"),
+                            weight: FW.medium,
+                            color: AppColor_BlackText.withOpacity(0.5)
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width - 160,
+                                child: UnderlineInput(
+                                  controller: certificationInputController,
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.done,
+                                  onEditingComplete: () => onVerificationCode(),
+                                  placeholder:
+                                  LanguageService.trans("인증번호 6자리 숫자"),
+                                  onChanged: (text) => {
+                                    verification_code = text,
+                                    checkValid(),
+                                  },
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10.0,),
+                            SizedBox(
+                              height: 50,
+                              width: 70,
+                              child: MainTextButton(
+                                text: "확인",
+                                style: AppTextStyle.PD(Colors.white, 14),
+                                disable: !isValid,
+                                disableBackground: !isValid
+                                    ? AppColor_Primary_Disable
+                                    : Colors.transparent,
+                                onPressed: () {
+                                  node.unfocus();
+                                  onVerificationCode();
+                                  checkValid();
+                                },
+                              )
+                            )
+                          ],
                         ),
                         const SizedBox(height: 20),
                         H14(

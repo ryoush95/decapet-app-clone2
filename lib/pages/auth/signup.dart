@@ -35,6 +35,8 @@ class SignupPageState extends BaseState<SignupPage> {
   bool isPolicy = false;
   bool isPush = false;
   bool isMaketing = false;
+  int code = 0;
+  int isSendCode = 0;
 
   @override
   void initState() {
@@ -60,10 +62,15 @@ class SignupPageState extends BaseState<SignupPage> {
         isALL = false;
     });
   }
-
+  void onSendCode(int code) {
+    setState(() {
+      this.code = code;
+      isSendCode = code;
+    });
+  }
   void onNext() {
     if (isValid) {
-      Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupInputPage(isEdit: false, signupType: widget.signupType, snsId: widget.snsId)));
+      Navigator.push(context, SlideRightTransRoute(builder: (context) => SignupInputPage(isEdit: false, signupType: widget.signupType, snsId: widget.snsId, onSendCode: onSendCode,)));
     }
   }
 
