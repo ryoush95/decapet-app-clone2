@@ -288,9 +288,9 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         hideLoading();
         if (value.result == 0) {
           showToast("인증번호를 전송하였습니다.");
-          setState(() {
+        /*  setState(() {
             idValid = true;
-          });
+          });*/
         } else {
           showToast(value.msg!);
         }
@@ -309,12 +309,9 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         hideLoading();
         if (value.result == 0) {
           showToast("인증되었습니다.");
-          //widget.onSendCode(2);
-          setState(() {
-            idValid = true;
-          });
+          stimer = 0;
         } else {
-          showToast(value.msg!);
+          showToast("인증번호를 확인해주세요.");
         }
       });
     } on Exception catch (_, e) {
@@ -521,9 +518,10 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                       child: Container(
                                         margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                         child: MainTextButton(
-                                          width: 70,
+                                          width: 60,
+                                          height: 40,
                                           style:
-                                              AppTextStyle.PD(Colors.white, 14),
+                                              AppTextStyle.PD(AppColor_Primary, 14),
                                           text: "중복확인",
                                           disable: idValid,
                                           disableBackground: !isValid
@@ -640,9 +638,10 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                 margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: timerBt ?
                                 MainTextButton(
-                                  width: 70,
+                                  width: 60,
+                                  height: 40,
                                   style:
-                                  AppTextStyle.PD(Colors.white, 14),
+                                  AppTextStyle.PD(AppColor_Primary, 14),
                                   text: timerBt1 ? "인증번호 \n재전송" : "인증번호\n전송" ,
                                   disable: isValid,
                                   disableBackground: !isValid
@@ -661,7 +660,6 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                       startTimer();
                                       timerBt = false;
                                       timerBt1 = true;
-                                     // phoneCodeCheck();
                                     }
                                   },
                                 )
@@ -702,12 +700,12 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                             ),
                             const SizedBox(width: 10.0,),
                             SizedBox(
-                              height: 50,
-                              width: 70,
+                              height: 40,
+                              width: 60,
                               child: MainTextButton(
                                 text: "확인",
-                                style: AppTextStyle.PD(Colors.white, 14),
-                                disable: !isValid,
+                                style: AppTextStyle.PD(AppColor_Primary, 14),
+                                disable: isValid,
                                 disableBackground: !isValid
                                     ? AppColor_Primary_Disable
                                     : Colors.transparent,
@@ -743,10 +741,10 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                             const SizedBox(width: 10),
                             MainTextButton(
                               text: LanguageService.trans("search"),
-                              backgroundColor: AppColor_Intro_Description,
-                              style: AppTextStyle.PD(Colors.white, 16, weight: FW.medium),
-                              width: 92,
-                              height: 48,
+                              backgroundColor: AppColor_White,
+                              style: AppTextStyle.PD(AppColor_Primary, 14, weight: FW.medium),
+                              width: 60,
+                              height: 40,
                               onPressed: () {
                                 onSearch();
                               },
