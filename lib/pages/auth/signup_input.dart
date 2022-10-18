@@ -77,6 +77,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
   List<String> pathList = [];
   bool idValid = false;
   String target = "";
+  bool pnumVal = false;
 
   String verification_code = "";
 
@@ -141,6 +142,12 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
       emailController.text = widget.snsId;
       pwd = widget.snsId;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
   }
 
   Future<bool> onBackPressed() async {
@@ -660,6 +667,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                       startTimer();
                                       timerBt = false;
                                       timerBt1 = true;
+                                      pnumVal = true;
                                     }
                                   },
                                 )
@@ -672,51 +680,57 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        H14(
-                            text: LanguageService.trans("인증번호 입력"),
-                            weight: FW.medium,
-                            color: AppColor_BlackText.withOpacity(0.5)
+                        Visibility(
+                          visible: pnumVal,
+                          child: H14(
+                              text: LanguageService.trans("인증번호 입력"),
+                              weight: FW.medium,
+                              color: AppColor_BlackText.withOpacity(0.5)
+                          ),
                         ),
                         const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width - 160,
-                                child: UnderlineInput(
-                                  controller: certificationInputController,
-                                  keyboardType: TextInputType.phone,
-                                  textInputAction: TextInputAction.done,
-                                  onEditingComplete: () => onVerificationCode(),
-                                  placeholder:
-                                  LanguageService.trans("인증번호 6자리 숫자"),
-                                  onChanged: (text) => {
-                                    verification_code = text,
-                                    checkValid(),
-                                  },
+                        Visibility(
+                          visible: pnumVal,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width - 160,
+                                  child: UnderlineInput(
+                                    controller: certificationInputController,
+                                    keyboardType: TextInputType.phone,
+                                    textInputAction: TextInputAction.done,
+                                    onEditingComplete: () => onVerificationCode(),
+                                    placeholder: LanguageService.trans("인증번호 6자리 숫자"),
+                                    maxLength: 6,
+                                    onChanged: (text) => {
+                                      verification_code = text,
+                                      checkValid(),
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10.0,),
-                            SizedBox(
-                              height: 40,
-                              width: 60,
-                              child: MainTextButton(
-                                text: "확인",
-                                style: AppTextStyle.PD(AppColor_Primary, 14),
-                                disable: isValid,
-                                disableBackground: !isValid
-                                    ? AppColor_Primary_Disable
-                                    : Colors.transparent,
-                                onPressed: () {
-                                  node.unfocus();
-                                  onVerificationCode();
-                                  checkValid();
-                                },
+                              const SizedBox(width: 10.0,),
+                              SizedBox(
+                                height: 40,
+                                width: 60,
+                                child: MainTextButton(
+                                  text: "확인",
+                                  style: AppTextStyle.PD(AppColor_Primary, 14),
+                                  disable: isValid,
+                                  disableBackground: !isValid
+                                      ? AppColor_Primary_Disable
+                                      : Colors.transparent,
+                                  onPressed: () {
+                                    node.unfocus();
+                                    onVerificationCode();
+                                    checkValid();
+                                  },
+                                )
                               )
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 20),
                         H14(
