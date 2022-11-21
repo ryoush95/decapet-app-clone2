@@ -32,8 +32,8 @@ class MainTextButton extends StatelessWidget {
     this.width ??= double.infinity;
     this.height ??= 50;
     this.showBorder ??= false;
-    this.backgroundColor ??= AppColor_White;
-    this.disableBackground ??= AppColor_Primary;
+    this.backgroundColor ??= AppColor_Primary;
+    this.disableBackground ??= AppColor_Primary_Disable;
     this.radius ??= 10;
     this.disable ??= false;
   }

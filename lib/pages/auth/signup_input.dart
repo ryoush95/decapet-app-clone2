@@ -78,6 +78,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
   bool idValid = false;
   String target = "";
   bool pnumVal = false;
+  bool isPhone = false;
 
   String verification_code = "";
 
@@ -129,7 +130,6 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
         addr2InputController.text = user.info.address_detail;
         address2 = user.info.address_detail;
         joinPath = user.info.path;
-        print(joinPath);
         referInputController.text = user.info.recommend_email;
         referId = user.info.recommend_email;
       });
@@ -174,6 +174,10 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
 
   void checkValid() {
 
+    if (referId.isNotEmpty) {
+      isValid = isValid && validEmail(referId);
+    }
+
     if (widget.signupType == 'normal') {
       if (!validEmail(email) ||
           pwd.isEmpty ||
@@ -181,7 +185,8 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
           phone.isEmpty ||
           zipCode.isEmpty ||
           address1.isEmpty ||
-          address2.isEmpty) {
+          address2.isEmpty ||
+          !isPhone) {
         setState(() {
           isValid = false;
         });
@@ -199,7 +204,8 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
           phone.isEmpty ||
           zipCode.isEmpty ||
           address1.isEmpty ||
-          address2.isEmpty) {
+          address2.isEmpty ||
+          !isPhone) {
         setState(() {
           isValid = false;
         });
@@ -208,20 +214,6 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
           isValid = true;
         });
       }
-    }
-
-    if (referId.isNotEmpty) {
-      isValid = isValid && validEmail(referId);
-    }
-
-    if (verification_code.isEmpty ) {
-      setState(() {
-        isValid = false;
-      });
-    } else {
-      setState(() {
-        isValid = true;
-      });
     }
   }
 
@@ -529,6 +521,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                           height: 40,
                                           style:
                                               AppTextStyle.PD(AppColor_Primary, 14),
+                                          backgroundColor: AppColor_White,
                                           text: "중복확인",
                                           disable: idValid,
                                           disableBackground: !isValid
@@ -630,6 +623,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                   textInputAction: TextInputAction.next,
                                   maxLength: 11,
                                   onEditingComplete: () => node.nextFocus(),
+                                  readOnly: pnumVal,
                                   placeholder:
                                   LanguageService.trans("input_only_number"),
                                   height: 30,
@@ -649,6 +643,7 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                   height: 40,
                                   style:
                                   AppTextStyle.PD(AppColor_Primary, 14),
+                                  backgroundColor: AppColor_White,
                                   text: timerBt1 ? "인증번호 \n재전송" : "인증번호\n전송" ,
                                   disable: isValid,
                                   disableBackground: !isValid
@@ -718,11 +713,13 @@ class SignupInputPageState extends BaseState<SignupInputPage> {
                                 child: MainTextButton(
                                   text: "확인",
                                   style: AppTextStyle.PD(AppColor_Primary, 14),
+                                  backgroundColor: AppColor_White,
                                   disable: isValid,
                                   disableBackground: !isValid
                                       ? AppColor_Primary_Disable
                                       : Colors.transparent,
                                   onPressed: () {
+                                    isPhone = true;
                                     node.unfocus();
                                     onVerificationCode();
                                     checkValid();

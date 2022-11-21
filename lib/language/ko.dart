@@ -381,7 +381,7 @@ final Map<String, String> ko_lang = {
   "silver": "Silver",
   "gold": "Gold",
   "platinum": "Platinum",
-  "dia": "Dia",
+  "dia": "Diamond",
   "bronze": "Bronze",
   "iron": "Iron",
   "hodu": "호두",

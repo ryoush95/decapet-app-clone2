@@ -255,8 +255,8 @@ class BloodTestResultState extends BaseState<BloodTestResultPage> {
                                                     align: TextAlign.center,
                                                     weight: FW.regular,
                                                     color:
-                                                        (double.parse(itemList[index].reference_min) < double.parse(resultList[i].value)
-                                                        && double.parse(itemList[index].reference_max) > double.parse(resultList[i].value))
+                                                        (double.parse(itemList[index].reference_min) <= double.parse(resultList[i].value)
+                                                        && double.parse(itemList[index].reference_max) >= double.parse(resultList[i].value))
                                                         || convertNumber(itemList[index].reference_max) == '0'
                                                         ?  AppColor_BlackText: AppColor_Red
                                                   ),
