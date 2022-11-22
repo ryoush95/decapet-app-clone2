@@ -320,7 +320,7 @@ class FindHospitalState extends BaseState<FindHospital> {
                 margin: const EdgeInsets.only(bottom: 10, right: 24),
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, SlideRightTransRoute(builder: (context) => MapHospitalPage(hospitalList: hospitalList)));
+                    // Navigator.push(context, SlideRightTransRoute(builder: (context) => MapHospitalPage(hospitalList: hospitalList)));
                   },
                   child: Align(
                     alignment: Alignment.centerRight,

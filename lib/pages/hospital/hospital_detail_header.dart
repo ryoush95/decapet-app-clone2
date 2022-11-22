@@ -189,7 +189,7 @@ class HospitalDetailHeaderState extends BaseState<HospitalDetailHeader> with Tic
                                   controller: tabController,
                                   physics: const NeverScrollableScrollPhysics(),
                                   children: [
-                                    HospitalInfo(item: widget.item),
+                                    // HospitalInfo(item: widget.item),
                                     HospitalDetailPage(hospitalId: widget.item.id, hospitalName: widget.item.name),
                                   ],
                                 ),

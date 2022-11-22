@@ -3,7 +3,7 @@
 import 'package:decapet/helpers/fcm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 import 'global/app_colors.dart';
 import 'global/app_get_it.dart';
@@ -14,6 +14,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   initFcm();
+  KakaoSdk.init(
+      nativeAppKey: '8358269776945a3b1fdedf8a7f09c6da',
+      javaScriptAppKey: '4c95a366fbbb8e688a8d7d21c350f762'
+  );
   runApp(const MyApp());
 }
 
@@ -39,10 +43,4 @@ class MyApp extends StatelessWidget {
       home: SplashPage(),
     );
   }
-}
-
-void initKakao() async {
-  KakaoSdk.init(
-      nativeAppKey: '8358269776945a3b1fdedf8a7f09c6da',
-      javaScriptAppKey: '4c95a366fbbb8e688a8d7d21c350f762');
 }
