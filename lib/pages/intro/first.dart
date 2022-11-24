@@ -277,7 +277,7 @@ class FirstPageState extends BaseState<FirstPage> {
                     visible: Platform.isIOS,
                     child: InkWell(
                       onTap: () {
-                        onLogin();
+                        onSnsLogin("apple");
                       },
                       child: Column(
                         children: [
